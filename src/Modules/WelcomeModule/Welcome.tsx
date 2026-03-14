@@ -57,7 +57,7 @@ const Welcome = () => {
                 </div>
 
                 <img
-                    src={"src/assets/bitmap.svg"}
+                    src={"public/assets/bitmap.svg"}
                     alt="Lock"
                     width={340}
                     className="drop-shadow-xl"
