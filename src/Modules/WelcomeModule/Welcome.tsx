@@ -13,6 +13,7 @@ import {Link} from "react-router";
 import {HashLink} from "react-router-hash-link";
 import Button_Black from "../Shared/Components/Buttons/Button_Black.tsx";
 import Button_White from "../Shared/Components/Buttons/Button_White.tsx";
+import bitmap from '/public/assets/bitmap.svg';
 
 
 const Welcome = () => {
@@ -57,7 +58,7 @@ const Welcome = () => {
                 </div>
 
                 <img
-                    src={"public/assets/bitmap.svg"}
+                    src={bitmap}
                     alt="Lock"
                     width={340}
                     className="drop-shadow-xl"
