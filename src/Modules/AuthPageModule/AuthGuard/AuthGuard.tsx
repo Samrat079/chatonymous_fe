@@ -21,7 +21,6 @@ const AuthGuard = (): JSX.Element => {
     }
 
     if (isError) {
-        console.log("user not found pushing to login")
         return <Navigate to="/login" replace/>;
     }
 

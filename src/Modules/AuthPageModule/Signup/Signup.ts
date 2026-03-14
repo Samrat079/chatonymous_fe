@@ -17,9 +17,7 @@ const Signup = async ({userName, passWord}: LoginReq) => {
         throw new Error(text);
     }
 
-    const data = await res.json();
-    console.log(data);
-    return data;
+    return res.json();
 };
 
 export default Signup;

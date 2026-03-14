@@ -1,7 +1,6 @@
 const getCurrentUser = async () => {
 
     const token = localStorage.getItem("token");
-    console.log("token found: " + token);
 
     if (!token) throw new Error("No token provided");
 
@@ -16,9 +15,7 @@ const getCurrentUser = async () => {
         throw new Error(text);
     }
 
-    const data = await res.json();
-    console.log(data);
-    return data;
+    return res.json();
 }
 
 export default getCurrentUser;
