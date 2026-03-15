@@ -1,27 +1,32 @@
-import {NavLink, Outlet, useNavigate} from "react-router";
-import {useQuery, useQueryClient} from "@tanstack/react-query";
-import conversationByUserName from "./Api/conversationByUserName.ts";
+import {NavLink, Outlet} from "react-router";
+import {useQuery} from "@tanstack/react-query";
 import type {ConversationType} from "../../Types/ConversationType.ts";
-import Button_White from "../Shared/Components/Buttons/Button_White.tsx";
+import LoadingSpinner from "../Shared/Components/LoadingSpinner/LoadingSpinner.tsx";
+import * as React from "react";
+import useAuth from "../AuthPageModule/UseAuth/useAuth.tsx";
+import convoByIdOrParticipants from "./Api/convoByIdOrParticipants.ts";
 
 const Layout = () => {
-    const queryClient = useQueryClient();
-    const navigator = useNavigate();
+    const {data: currUser, logout} = useAuth();
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        queryClient.removeQueries({queryKey: ["Current_user"]});
-        navigator('/login', {replace: true});
-    }
-
-    const currUser: string = "foahov";
     const {data, isLoading, isError} = useQuery<ConversationType[]>({
-        queryKey: ['conversationsByUsername'],
-        queryFn: () => conversationByUserName(currUser),
+        queryKey: ['convoByIdOrParticipants', currUser?.userName],
+        queryFn: () => convoByIdOrParticipants(undefined, [currUser!.userName]),
+        enabled: !!currUser, // prevents the fetch before user
     });
 
+    const handleSubmit = (
+        e: React.SubmitEvent<HTMLFormElement>
+    ) => {
+        e.preventDefault();
+    }
+
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <LoadingSpinner size={64}/>
+            </div>
+        )
     }
 
     if (isError) {
@@ -32,9 +37,9 @@ const Layout = () => {
         <div className="flex min-h-screen">
             <nav className="flex flex-col gap-4">
                 <NavLink to='/conversations'>Conversations</NavLink>
-                <Button_White onClick={handleLogout}>Logout</Button_White>
+                <button onClick={logout}>logout</button>
 
-                <form>
+                <form onSubmit={handleSubmit}>
                     <input type="search" placeholder="newUser45..."/>
                 </form>
 
@@ -45,7 +50,12 @@ const Layout = () => {
                         className="flex flex-col p-2 bg-pink-200"
                         replace
                     >
-                        {chat.participants.filter((i: string) => i !== currUser)}
+                        {chat
+                            .participants
+                            .filter((i: string) => i !==
+                                currUser!.userName
+                            )
+                        }
                     </NavLink>
                 ))}
             </nav>

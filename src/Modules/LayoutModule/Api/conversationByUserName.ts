@@ -1,6 +1,7 @@
+import {convos_url} from "../../../api/urls.ts";
+
 const conversationByUserName = async (username: string) => {
-    const url = "https://chatonymous-be.onrender.com/api/conversations?userName="
-    const res = await fetch(url + username);
+    const res = await fetch(convos_url + username);
     return await res.json();
 }
 

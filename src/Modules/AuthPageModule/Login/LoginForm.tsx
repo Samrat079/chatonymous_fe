@@ -3,22 +3,23 @@ import * as React from "react";
 import Button_Black from "../../Shared/Components/Buttons/Button_Black.tsx";
 import Button_White from "../../Shared/Components/Buttons/Button_White.tsx";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import Login from "./Login.ts";
 import {Link, useNavigate} from "react-router";
 
 import {FaUser, FaLock} from "react-icons/fa";
 import LoadingSpinner from "../../Shared/Components/LoadingSpinner/LoadingSpinner.tsx";
+import useAuth from "../UseAuth/useAuth.tsx";
 
 const LoginForm = () => {
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     const {mutate, isPending, isError, error} = useMutation({
-        mutationFn: Login,
+        mutationFn: login,
         onSuccess: async (data) => {
             localStorage.setItem("token", data.token);
-            await queryClient.invalidateQueries({queryKey: ["Current_user"]})
+            await queryClient.invalidateQueries({queryKey: ["getCurrentUser"]});
             navigate("/conversations", {replace: true})
         }
     });

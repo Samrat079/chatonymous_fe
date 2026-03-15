@@ -3,22 +3,23 @@ import * as React from "react";
 import Button_Black from "../../Shared/Components/Buttons/Button_Black.tsx";
 import Button_White from "../../Shared/Components/Buttons/Button_White.tsx";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import Signup from "./Signup.ts";
 import {Link, useNavigate} from "react-router";
 
 import {FaUser, FaLock} from "react-icons/fa";
 import LoadingSpinner from "../../Shared/Components/LoadingSpinner/LoadingSpinner.tsx";
+import useAuth from "../UseAuth/useAuth.tsx";
 
 const SignupForm = () => {
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const {signup} = useAuth();
 
-    const {mutate, isPending,isError, error} = useMutation({
-        mutationFn: Signup,
+    const {mutate, isPending, isError, error} = useMutation({
+        mutationFn: signup,
         onSuccess: async (data) => {
             localStorage.setItem("token", data.token);
-            await queryClient.invalidateQueries({queryKey: ["Current_user"]})
+            await queryClient.invalidateQueries({queryKey: ["getCurrentUser"]});
             navigate("/login", {replace: true})
         }
     });
@@ -83,7 +84,7 @@ const SignupForm = () => {
                     <div className="flex justify-center gap-4 pt-2">
 
                         <Button_Black type="submit" disabled={isPending}>
-                            {isPending ? <LoadingSpinner size={24} /> : "Signup"}
+                            {isPending ? <LoadingSpinner size={24}/> : "Signup"}
                         </Button_Black>
 
                         <Button_White type="reset">

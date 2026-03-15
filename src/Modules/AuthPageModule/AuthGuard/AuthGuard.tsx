@@ -1,16 +1,11 @@
 import {Navigate, Outlet} from "react-router";
-import {useQuery} from "@tanstack/react-query";
 import LoadingSpinner from "../../Shared/Components/LoadingSpinner/LoadingSpinner.tsx";
-import getCurrentUser from "./getCurrentUser.ts";
 import type {JSX} from "react";
+import useAuth from "../UseAuth/useAuth.tsx";
 
 const AuthGuard = (): JSX.Element => {
 
-    const {isLoading, isError} = useQuery({
-        queryKey: ["Current_user"],
-        queryFn: getCurrentUser,
-        retry: false
-    })
+    const {isLoading, isError} = useAuth();
 
     if (isLoading) {
         return (
