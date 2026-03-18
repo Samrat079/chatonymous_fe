@@ -1,68 +1,49 @@
-import {NavLink, Outlet} from "react-router";
-import {useQuery} from "@tanstack/react-query";
-import type {ConversationType} from "../../Types/ConversationType.ts";
-import LoadingSpinner from "../Shared/Components/LoadingSpinner/LoadingSpinner.tsx";
-import * as React from "react";
+import {NavLink, Outlet, useSearchParams} from "react-router";
 import useAuth from "../AuthPageModule/UseAuth/useAuth.tsx";
-import convoByIdOrParticipants from "./Api/convoByIdOrParticipants.ts";
+import NewContacts from "./views/newContacts.tsx";
+import OldContacts from "./views/oldContacts.tsx";
+import {FaUser} from "react-icons/fa";
+import ToggleSearch from "./components/toggleSearch.tsx";
 
 const Layout = () => {
-    const {data: currUser, logout} = useAuth();
+    const {currUser} = useAuth();
 
-    const {data, isLoading, isError} = useQuery<ConversationType[]>({
-        queryKey: ['convoByIdOrParticipants', currUser?.userName],
-        queryFn: () => convoByIdOrParticipants(undefined, [currUser!.userName]),
-        enabled: !!currUser, // prevents the fetch before user
-    });
-
-    const handleSubmit = (
-        e: React.SubmitEvent<HTMLFormElement>
-    ) => {
-        e.preventDefault();
-    }
-
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <LoadingSpinner size={64}/>
-            </div>
-        )
-    }
-
-    if (isError) {
-        return <div>Something went wrong.</div>;
-    }
+    const [searchParams] = useSearchParams();
+    const isNewContact = searchParams.get("isNewContact");
+    const contactBool = isNewContact === "true";
 
     return (
-        <div className="flex min-h-screen">
-            <nav className="flex flex-col gap-4">
-                <NavLink to='/conversations'>Conversations</NavLink>
-                <button onClick={logout}>logout</button>
+        <div className="flex min-h-screen bg-linear-to-br from-cyan-200 to-pink-100">
 
-                <form onSubmit={handleSubmit}>
-                    <input type="search" placeholder="newUser45..."/>
-                </form>
+            <nav className="flex flex-col gap-2 p-2 w-80 h-screen bg-white/50 backdrop-blur-lg border-r border-white/40 shadow-lg">
 
-                {data!.map((chat) => (
-                    <NavLink
-                        key={chat.id}
-                        to={"/conversations/" + chat.id}
-                        className="flex flex-col p-2 bg-pink-200"
-                        replace
-                    >
-                        {chat
-                            .participants
-                            .filter((i: string) => i !==
-                                currUser!.userName
-                            )
-                        }
-                    </NavLink>
-                ))}
+                <p className="text-2xl py-3 px-2 font-semibold ">
+                    Chatonymous
+                </p>
+
+                {/* Search with toggle */}
+                <ToggleSearch/>
+
+                <div className="flex flex-row flex-1 overflow-hidden rounded-xl shadow-lg">
+                    <div className="flex-1 overflow-y-auto bg-white/30">
+                        {contactBool ? <NewContacts/> : <OldContacts/>}
+                    </div>
+                </div>
+
+                {/* profile link */}
+                <NavLink
+                    to="/profile"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/ 40hover:bg-white/60 border border-white/30 shadow-lg transition"
+                >
+                    <FaUser className="text-cyan-600"/>
+                    {currUser!.userName}
+                </NavLink>
             </nav>
-            <div className="w-full min-h-screen">
-                <Outlet/>
-            </div>
+
+            {/* outlet */}
+            <div className="flex-1 p-6"><Outlet/></div>
         </div>
-    )
-}
-export default Layout
+    );
+};
+
+export default Layout;

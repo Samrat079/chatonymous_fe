@@ -56,7 +56,7 @@ const UseAuth = () => {
 
 
     return {
-        data: query.data,
+        currUser: query.data,
         isLoading: query.isLoading,
         isError: query.isError,
         error: query.error,

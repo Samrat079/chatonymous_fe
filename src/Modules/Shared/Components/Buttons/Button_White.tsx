@@ -5,7 +5,7 @@ const ButtonWhite = ({children, ...props}: ButtonType) => {
         <button
             {...props}
             children={children}
-            className="py-4 px-8 border border-black rounded-xl font-bold hover:bg-black hover:text-white transition-all duration-200"
+            className="py-3 px-6 border border-black rounded-xl font-bold hover:bg-black hover:text-white transition-all duration-200"
         />
     )
 }
