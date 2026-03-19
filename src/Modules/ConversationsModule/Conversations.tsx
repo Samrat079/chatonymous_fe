@@ -42,11 +42,11 @@ const Conversations = () => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const input = formData.get("chatInput") as string;
-        if (!input?.trim()) return;
+        if (!input?.trim() || !currUser?.userName) return;
 
         mutateMsg({
             conversationId: id!,
-            createdBy: currUser?.userName,
+            createdBy: currUser.userName,
             textContent: input,
         });
 
@@ -71,7 +71,7 @@ const Conversations = () => {
             }
 
             {/* Messages */}
-            <div className="flex flex-col flex-1 overflow-auto mx-8 my-2 gap-2">
+            <div className="flex flex-col flex-1 overflow-auto mx-8 gap-2">
                 {messages?.map((msg: MessageType) => (
                     <MessageBubble msg={msg} key={msg.id} />
                 ))}

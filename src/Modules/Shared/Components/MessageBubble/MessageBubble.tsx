@@ -4,7 +4,7 @@ import useAuth from "../../../AuthPageModule/UseAuth/useAuth.tsx";
 const MessageBubble = ({msg}: { msg: MessageType }) => {
     const {currUser} = useAuth();
 
-    const localTime = new Date(msg.createdAt).toLocaleTimeString('en-IN', {
+    const localTime = new Date(msg.createdAt!).toLocaleTimeString('en-IN', {
         hour: 'numeric',
         minute: 'numeric',
         hour12: true

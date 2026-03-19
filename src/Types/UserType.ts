@@ -1,11 +1,11 @@
 export type UserType = {
-    id: string;
+    id?: string;
     userName: string;
     password: string;
-    dpUrl: string;
-    bio: string;
-    createdAt: string;
-    updatedAt: string;
+    dpUrl?: string;
+    bio?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 //public class UserModel {

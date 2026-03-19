@@ -1,7 +1,7 @@
 export type MessageType = {
-    id: string;
+    id?: string;
     conversationId: string;
     textContent: string;
     createdBy: string;
-    createdAt: Date;
+    createdAt?: Date;
 }

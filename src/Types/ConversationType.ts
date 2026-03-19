@@ -1,4 +1,4 @@
 export type ConversationType = {
-    id: string;
+    id?: string;
     participants: string[];
 }

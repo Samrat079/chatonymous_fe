@@ -47,13 +47,13 @@ const Profile = () => {
                         <div className="flex justify-between px-4 py-2 bg-white/40 rounded-lg">
                             <span className="text-gray-600">Joined</span>
                             <span
-                                className="text-gray-800 font-medium">{new Date(currUser!.createdAt).toLocaleDateString()}</span>
+                                className="text-gray-800 font-medium">{new Date(currUser!.createdAt!).toLocaleDateString()}</span>
                         </div>
 
                         <div className="flex justify-between px-4 py-2 bg-white/40 rounded-lg">
                             <span className="text-gray-600">Last Updated</span>
                             <span
-                                className="text-gray-800 font-medium"> {new Date(currUser!.updatedAt).toLocaleDateString()} </span>
+                                className="text-gray-800 font-medium"> {new Date(currUser!.updatedAt!).toLocaleDateString()} </span>
                         </div>
 
                     </div>
