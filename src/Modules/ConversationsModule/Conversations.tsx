@@ -1,9 +1,9 @@
-import { useParams } from "react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {useParams} from "react-router";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import convoByIdOrParticipants from "../LayoutModule/Api/convoByIdOrParticipants";
-import type { ConversationType } from "../../Types/ConversationType";
+import type {ConversationType} from "../../Types/ConversationType";
 import messagesSearch from "./api/messagesSearch";
-import type { MessageType } from "../../Types/MessageType";
+import type {MessageType} from "../../Types/MessageType";
 import useAuth from "../AuthPageModule/UseAuth/useAuth";
 import LoadingSpinner from "../Shared/Components/LoadingSpinner/LoadingSpinner";
 import addMessages from "./api/addMessages";
@@ -11,29 +11,29 @@ import {type SyntheticEvent} from "react";
 import MessageBubble from "../Shared/Components/MessageBubble/MessageBubble.tsx";
 
 const Conversations = () => {
-    const { currUser } = useAuth();
-    const { id } = useParams<{ id: string }>();
+    const {currUser} = useAuth();
+    const {id} = useParams<{ id: string }>();
     const queryClient = useQueryClient();
 
     // 🔹 Fetch conversation
-    const { data: convoList, isLoading: convoLoading } = useQuery<ConversationType[]>({
+    const {data: convoList, isLoading: convoLoading} = useQuery<ConversationType[]>({
         queryKey: ["convoByIdOrParticipants", id],
         queryFn: () => convoByIdOrParticipants(id!, []),
         enabled: !!id,
     });
 
     // 🔹 Fetch messages
-    const { data: messages, isLoading: msgLoading } = useQuery<MessageType[]>({
+    const {data: messages, isLoading: msgLoading} = useQuery<MessageType[]>({
         queryKey: ["messagesSearch", id],
         queryFn: () => messagesSearch(id!, ""),
         enabled: !!id && !!convoList,
     });
 
     // 🔹 Mutation
-    const { mutate: mutateMsg } = useMutation({
+    const {mutate: mutateMsg} = useMutation({
         mutationFn: addMessages,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["messagesSearch", id] });
+            queryClient.invalidateQueries({queryKey: ["messagesSearch", id]});
         }
     });
 
@@ -58,17 +58,22 @@ const Conversations = () => {
     return (
         <div className="flex flex-col h-screen">
 
-            {(convoLoading || msgLoading) && <LoadingSpinner />}
 
             {/* Header */}
             <div className="bg-white/50 backdrop-blur-md p-4">
                 {convo?.participants.filter((i) => i !== currUser?.userName)}
             </div>
 
+            {(convoLoading || msgLoading) &&
+                <div className="flex items-center justify-center h-full">
+                    <LoadingSpinner size={64}/>
+                </div>
+            }
+
             {/* Messages */}
             <div className="flex flex-col flex-1 overflow-auto mx-8 my-2 gap-2">
                 {messages?.map((msg: MessageType) => (
-                    <MessageBubble msg={msg} />
+                    <MessageBubble msg={msg} key={msg.id} />
                 ))}
             </div>
 

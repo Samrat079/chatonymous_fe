@@ -1,9 +1,9 @@
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import type {UserType} from "../../../Types/UserType.ts";
-import getCurrentUser from "./getCurrentUser.ts";
+import getCurrentUser from "./api/getCurrentUser.ts";
 import {useNavigate} from "react-router";
-import type {LoginReq} from "../../../Types/LoginReq.ts";
-import {users_url} from "../../../api/urls.ts";
+import login from "./api/login.ts";
+import signup from "./api/signup.ts";
 
 const UseAuth = () => {
     const queryClient = useQueryClient();
@@ -19,41 +19,6 @@ const UseAuth = () => {
         queryClient.removeQueries({queryKey: ["Current_user"]});
         navigate('/login', {replace: true});
     }
-
-    const login = async ({userName, passWord}: LoginReq) => {
-        const res = await fetch(
-            users_url + "/login",
-            {
-                method: "POST",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify({userName, passWord}),
-            });
-
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text);
-        }
-
-        return res.json();
-    }
-
-    const signup = async ({userName, passWord}: LoginReq) => {
-        const res = await fetch(
-            users_url + "/signup",
-            {
-                method: "POST",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify({userName, passWord}),
-            });
-
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text);
-        }
-
-        return res.json();
-    }
-
 
     return {
         currUser: query.data,
