@@ -11,10 +11,9 @@ const Profile = () => {
     }
 
     return (
-        <div className="w-full flex flex-col gap-6">
+        <div className="w-full flex flex-col gap-6 p-12">
             <div className="flex items-center gap-6 px-2">
 
-                {/* Avatar */}
                 <div
                     className="w-28 h-28 rounded-full bg-cyan-200 flex items-center justify-center text-4xl font-bold text-cyan-700 shadow-inner">
                     {currUser!.userName[0].toUpperCase()}
@@ -22,7 +21,7 @@ const Profile = () => {
 
                 {/* Username */}
                 <div className="flex flex-col">
-                    <h1 className="text-2xl font-semibold text-gray-800">
+                    <h1 className="text-4xl font-bold text-gray-800">
                         {currUser!.userName}
                     </h1>
 

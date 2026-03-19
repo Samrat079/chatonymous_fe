@@ -1,33 +1,91 @@
-import {useParams} from "react-router";
-import {useQuery} from "@tanstack/react-query";
-import convoByIdOrParticipants from "../LayoutModule/Api/convoByIdOrParticipants.ts";
-import type {ConversationType} from "../../Types/ConversationType.ts";
-import messagesSearch from "./api/messagesSearch.ts";
-import type {MessageType} from "../../Types/MessageType.ts";
-import useAuth from "../AuthPageModule/UseAuth/useAuth.tsx";
+import { useParams } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import convoByIdOrParticipants from "../LayoutModule/Api/convoByIdOrParticipants";
+import type { ConversationType } from "../../Types/ConversationType";
+import messagesSearch from "./api/messagesSearch";
+import type { MessageType } from "../../Types/MessageType";
+import useAuth from "../AuthPageModule/UseAuth/useAuth";
+import LoadingSpinner from "../Shared/Components/LoadingSpinner/LoadingSpinner";
+import addMessages from "./api/addMessages";
+import {type SyntheticEvent} from "react";
+import MessageBubble from "../Shared/Components/MessageBubble/MessageBubble.tsx";
 
 const Conversations = () => {
-    const {currUser} = useAuth();
-    const {id} = useParams();
+    const { currUser } = useAuth();
+    const { id } = useParams<{ id: string }>();
+    const queryClient = useQueryClient();
 
-    const {data: convoList} = useQuery<ConversationType[]>({
+    // 🔹 Fetch conversation
+    const { data: convoList, isLoading: convoLoading } = useQuery<ConversationType[]>({
         queryKey: ["convoByIdOrParticipants", id],
-        queryFn: () => convoByIdOrParticipants(id, [])
-    })
+        queryFn: () => convoByIdOrParticipants(id!, []),
+        enabled: !!id,
+    });
 
-    const {data: messages} = useQuery<MessageType[]>({
+    // 🔹 Fetch messages
+    const { data: messages, isLoading: msgLoading } = useQuery<MessageType[]>({
         queryKey: ["messagesSearch", id],
-        queryFn: () => messagesSearch(id, ""),
-        enabled: !!convoList
-    })
+        queryFn: () => messagesSearch(id!, ""),
+        enabled: !!id && !!convoList,
+    });
 
-    const convo = convoList?.[0]; // Taking the only match
-    console.log(messages);
+    // 🔹 Mutation
+    const { mutate: mutateMsg } = useMutation({
+        mutationFn: addMessages,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["messagesSearch", id] });
+        }
+    });
+
+    // 🔹 Submit handler
+    const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const input = formData.get("chatInput") as string;
+        if (!input?.trim()) return;
+
+        mutateMsg({
+            conversationId: id!,
+            createdBy: currUser?.userName,
+            textContent: input,
+        });
+
+        e.currentTarget.reset();
+    };
+
+    const convo = convoList?.[0];
 
     return (
-        <div>
-            Convo for the user {convo?.participants.filter(p => p !== currUser!.userName)}
+        <div className="flex flex-col h-screen">
+
+            {(convoLoading || msgLoading) && <LoadingSpinner />}
+
+            {/* Header */}
+            <div className="bg-white/50 backdrop-blur-md p-4">
+                {convo?.participants.filter((i) => i !== currUser?.userName)}
+            </div>
+
+            {/* Messages */}
+            <div className="flex flex-col flex-1 overflow-auto mx-8 my-2 gap-2">
+                {messages?.map((msg: MessageType) => (
+                    <MessageBubble msg={msg} />
+                ))}
+            </div>
+
+            {/* Input */}
+            <form
+                onSubmit={handleSubmit}
+                className="flex items-center gap-2 mx-8 mb-6 px-3 py-4 rounded-xl bg-white/50 backdrop-blur-md shadow-lg border border-white/40"
+            >
+                <input
+                    name="chatInput"
+                    type="text"
+                    placeholder="Type a message..."
+                    className="flex-1 bg-transparent outline-none placeholder:text-gray-500 text-sm"
+                />
+            </form>
         </div>
-    )
-}
-export default Conversations
+    );
+};
+
+export default Conversations;

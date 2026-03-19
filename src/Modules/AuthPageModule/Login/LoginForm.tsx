@@ -20,7 +20,7 @@ const LoginForm = () => {
         onSuccess: async (data) => {
             localStorage.setItem("token", data.token);
             await queryClient.invalidateQueries({queryKey: ["getCurrentUser"]});
-            navigate("/conversations", {replace: true})
+            navigate("/profile", {replace: true})
         }
     });
 
