@@ -46,7 +46,7 @@ const Conversations = () => {
 
         mutateMsg({
             conversationId: id!,
-            createdBy: currUser.userName,
+            // createdBy: currUser.userName,
             textContent: input,
         });
 

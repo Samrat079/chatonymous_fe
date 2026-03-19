@@ -4,7 +4,7 @@ import type {MessageType} from "../../../Types/MessageType.ts";
 const addMessages = async ({
     conversationId,
     textContent,
-    createdBy
+    // createdBy
 }: MessageType) => {
     const token = localStorage.getItem('token');
 
@@ -17,7 +17,7 @@ const addMessages = async ({
         body: JSON.stringify({
             conversationId,
             textContent,
-            createdBy
+            // createdBy
         })
     })
 
