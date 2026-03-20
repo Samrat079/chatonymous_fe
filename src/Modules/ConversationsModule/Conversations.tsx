@@ -7,12 +7,13 @@ import type {MessageType} from "../../Types/MessageType";
 import useAuth from "../AuthPageModule/UseAuth/useAuth";
 import LoadingSpinner from "../Shared/Components/LoadingSpinner/LoadingSpinner";
 import addMessages from "./api/addMessages";
-import {type SyntheticEvent} from "react";
+import {type SyntheticEvent, useEffect, useRef} from "react";
 import MessageBubble from "../Shared/Components/MessageBubble/MessageBubble.tsx";
 
 const Conversations = () => {
     const {currUser} = useAuth();
     const {id} = useParams<{ id: string }>();
+    const messageListRef = useRef<HTMLDivElement | null>(null);
     const queryClient = useQueryClient();
 
     // 🔹 Fetch conversation
@@ -27,15 +28,27 @@ const Conversations = () => {
         queryKey: ["messagesSearch", id],
         queryFn: () => messagesSearch(id!, ""),
         enabled: !!id && !!convoList,
+        refetchInterval: 5000
     });
 
     // 🔹 Mutation
     const {mutate: mutateMsg} = useMutation({
         mutationFn: addMessages,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["messagesSearch", id]});
+            queryClient
+                .invalidateQueries({queryKey: ["messagesSearch", id]})
+                .then(null);
         }
     });
+
+    useEffect(() => {
+        if (messageListRef.current) {
+            messageListRef.current?.scrollTo({
+                top: messageListRef.current.scrollHeight,
+                behavior: "smooth"
+            });
+        }
+    }, [messages]);
 
     // 🔹 Submit handler
     const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
@@ -46,7 +59,6 @@ const Conversations = () => {
 
         mutateMsg({
             conversationId: id!,
-            // createdBy: currUser.userName,
             textContent: input,
         });
 
@@ -56,9 +68,7 @@ const Conversations = () => {
     const convo = convoList?.[0];
 
     return (
-        <div className="flex flex-col h-screen">
-
-
+        <div className="flex gap-1 flex-col h-screen">
             {/* Header */}
             <div className="bg-white/50 backdrop-blur-md p-4">
                 {convo?.participants.filter((i) => i !== currUser?.userName)}
@@ -71,9 +81,9 @@ const Conversations = () => {
             }
 
             {/* Messages */}
-            <div className="flex flex-col flex-1 overflow-auto mx-8 gap-2">
+            <div ref={messageListRef} className="flex flex-col flex-1 overflow-auto mx-8 gap-2">
                 {messages?.map((msg: MessageType) => (
-                    <MessageBubble msg={msg} key={msg.id} />
+                    <MessageBubble msg={msg} key={msg.id}/>
                 ))}
             </div>
 

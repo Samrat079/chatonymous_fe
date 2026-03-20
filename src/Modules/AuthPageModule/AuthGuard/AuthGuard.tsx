@@ -6,6 +6,7 @@ import useAuth from "../UseAuth/useAuth.tsx";
 const AuthGuard = (): JSX.Element => {
 
     const {isLoading, isError} = useAuth();
+    const isOnboarded = localStorage.getItem("isOnboarded") === "true";
 
     if (isLoading) {
         return (
@@ -15,9 +16,15 @@ const AuthGuard = (): JSX.Element => {
         )
     }
 
+    if (!isOnboarded) {
+        localStorage.setItem("isOnboarded", "true")
+        return <Navigate to="/welcome" replace />;
+    }
+
     if (isError) {
         return <Navigate to="/login" replace/>;
     }
+
 
     return (
         <Outlet/>

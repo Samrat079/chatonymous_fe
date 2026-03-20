@@ -12,7 +12,14 @@ const UseAuth = () => {
     const query = useQuery<UserType>({
         queryKey: ['getCurrentUser'],
         queryFn: getCurrentUser,
+        retry: false,
     })
+
+    const isNewUser = localStorage.getItem('newUser') == "true";
+
+    const setIsNewUser = () => {
+        localStorage.setItem('newUser', "true");
+    }
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -25,6 +32,9 @@ const UseAuth = () => {
         isLoading: query.isLoading,
         isError: query.isError,
         error: query.error,
+        refetch: query.refetch,
+        isNewUser,
+        setIsNewUser,
         logout,
         login,
         signup,
