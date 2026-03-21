@@ -1,6 +1,7 @@
 import Toggle01 from "../../Shared/Components/Toggle/Toggle_01.tsx";
 import {FaSearch} from "react-icons/fa";
 import {useSearchParams} from "react-router";
+import type {ChangeEvent} from "react";
 
 const ToggleSearch = () => {
 
@@ -9,8 +10,9 @@ const ToggleSearch = () => {
     const isNewContact = searchParams.get("isNewContact");
     const contactBool = isNewContact === "true";
 
-    const handleSearchChange = (value: string) => {
-        setSearchParams({isNewContact: contactBool.toString(), query: value});
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value;
+        setSearchParams({isNewContact: contactBool.toString(), query: query});
     };
 
     const toggleContacts = () => {
@@ -29,7 +31,7 @@ const ToggleSearch = () => {
                 type="search"
                 placeholder={contactBool ? "Search new contacts..." : "Search conversations..."}
                 value={query}
-                onChange={(e) => handleSearchChange(e.target.value)}
+                onChange={handleSearchChange}
                 className="flex-1 bg-transparent outline-none
                    placeholder:text-gray-500 text-sm"
             />
