@@ -6,6 +6,7 @@ import AuthGuard from "./Modules/AuthPageModule/AuthGuard/AuthGuard.tsx";
 import LoginForm from "./Modules/AuthPageModule/Login/LoginForm.tsx";
 import SignupForm from "./Modules/AuthPageModule/Signup/SignupForm.tsx";
 import Profile from "./Modules/ProfileModule/Profile.tsx";
+import EditUser from "./Modules/EditUserModule/EditUser.tsx";
 
 const App = () => {
     return (
@@ -21,7 +22,8 @@ const App = () => {
                 // Not full screen
                 <Route element={<Layout/>}>
                     <Route index path="/:id?" element={<Conversations/>}/>
-                    <Route path="/profile" element={<Profile />}/>
+                    <Route path="/profile/:userName" element={<Profile />}/>
+                    <Route path="/editUser" element={<EditUser/>}/>
                 </Route>
             </Route>
 

@@ -4,6 +4,7 @@ import getCurrentUser from "./api/getCurrentUser.ts";
 import {useNavigate} from "react-router";
 import login from "./api/login.ts";
 import signup from "./api/signup.ts";
+import updateCurrUser from "./api/updateCurrUser.tsx";
 
 const UseAuth = () => {
     const queryClient = useQueryClient();
@@ -38,6 +39,7 @@ const UseAuth = () => {
         logout,
         login,
         signup,
+        updateCurrUser
     }
 }
 export default UseAuth

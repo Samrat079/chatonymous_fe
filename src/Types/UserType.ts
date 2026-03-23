@@ -1,7 +1,7 @@
 export type UserType = {
     id?: string;
-    userName: string;
-    password: string;
+    userName?: string;
+    password?: string;
     dpUrl?: string;
     bio?: string;
     createdAt?: string;

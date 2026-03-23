@@ -17,9 +17,9 @@ const OldContacts = () => {
         queryFn: () =>
             convoByIdOrParticipants(
                 undefined,
-                query
-                    ? [currUser!.userName, query]
-                    : [currUser!.userName],
+                [currUser!.userName, query].filter(
+                    (p): p is string => typeof p === "string"
+                )
             ),
         enabled: !!currUser,
     });

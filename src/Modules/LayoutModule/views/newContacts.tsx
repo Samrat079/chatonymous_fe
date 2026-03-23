@@ -10,6 +10,7 @@ import {VscSearchStop} from "react-icons/vsc";
 
 const NewContacts = () => {
     const {currUser} = useAuth();
+    const currUserName = currUser!.userName || "";
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const query = searchParams.get("query") || "";
@@ -33,7 +34,7 @@ const NewContacts = () => {
     })
 
     const onClickHandler = (user: UserType) => {
-        mutate([currUser!.userName, user.userName]);
+        mutate([currUserName, user.userName!]);
     }
 
     return (
@@ -67,7 +68,7 @@ const NewContacts = () => {
                     <div
                         className="w-9 h-9 rounded-full bg-cyan-200 flex items-center justify-center text-sm font-semibold text-cyan-700"
                     >
-                        {user.userName[0].toUpperCase()}
+                        {user.userName![0].toUpperCase()}
                     </div>
 
                     <span className="text-gray-800">{user.userName}</span>

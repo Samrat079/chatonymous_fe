@@ -32,7 +32,7 @@ const Layout = () => {
 
                 {/* profile link */}
                 <NavLink
-                    to="/profile"
+                    to={"/profile/" + currUser!.userName}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/ 40hover:bg-white/60 border border-white/30 shadow-lg transition"
                 >
                     <FaUser className="text-cyan-600"/>
