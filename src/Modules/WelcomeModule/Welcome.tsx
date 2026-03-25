@@ -48,7 +48,7 @@ const Welcome = () => {
                             </Button_Black>
                         </Link>
 
-                        <HashLink to="/#features">
+                        <HashLink to="/welcome#features">
                             <Button_White>
                                 Learn More
                             </Button_White>

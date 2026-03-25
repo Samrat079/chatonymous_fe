@@ -22,11 +22,10 @@ const App = () => {
                 // Not full screen
                 <Route element={<Layout/>}>
                     <Route index path="/:id?" element={<Conversations/>}/>
-                    <Route path="/profile/:userName" element={<Profile />}/>
+                    <Route path="/profile/:userName" element={<Profile/>}/>
                     <Route path="/editUser" element={<EditUser/>}/>
                 </Route>
             </Route>
-
         </Routes>
     )
 }
