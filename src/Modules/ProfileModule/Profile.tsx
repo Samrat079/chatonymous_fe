@@ -15,17 +15,26 @@ const Profile = () => {
     const {
         data = [],
         isLoading,
+        isError,
+        error,
     } = useQuery<UserType[]>({
         queryKey: ['userByUserName', userName],
         queryFn: () => userByUserName(userName!),
     });
 
-    const profileData = data[0]!;
-    const profileUserName: string = profileData?.userName || "";
-
     if (isLoading) {
         return <div className='flex h-full items-center justify-center'><LoadingSpinner size={64}/></div>;
     }
+
+    if (isError) {
+        return <div className='flex h-full items-center justify-center'>
+            Error: {error.message}
+        </div>
+    }
+
+    const profileData = data?.[0];
+    const profileUserName: string = profileData?.userName || "User";
+
 
     return (
         <div className="w-full flex flex-col gap-6 p-12">
