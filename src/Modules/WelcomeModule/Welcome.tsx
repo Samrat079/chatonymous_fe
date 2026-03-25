@@ -13,7 +13,7 @@ import {Link} from "react-router";
 import {HashLink} from "react-router-hash-link";
 import Button_Black from "../Shared/Components/Buttons/Button_Black.tsx";
 import Button_White from "../Shared/Components/Buttons/Button_White.tsx";
-import lock_01 from '/src/assets/lock_01.svg';
+import Lock_02 from "../Shared/Components/SVGAnimations/Lock_02/Lock_02.tsx";
 
 
 const Welcome = () => {
@@ -57,12 +57,13 @@ const Welcome = () => {
 
                 </div>
 
-                <img
-                    src={lock_01}
-                    alt="Lock"
-                    width={340}
-                    className="drop-shadow-xl"
-                />
+                {/*<img*/}
+                {/*    src={lock_01}*/}
+                {/*    alt="Lock"*/}
+                {/*    width={340}*/}
+                {/*    className="drop-shadow-xl"*/}
+                {/*/>*/}
+                <Lock_02 />
             </section>
 
 
