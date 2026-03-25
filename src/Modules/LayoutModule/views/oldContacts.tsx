@@ -12,16 +12,13 @@ const OldContacts = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("query") || "";
 
-    const {data = [], isLoading, isError} = useQuery<ConversationType[]>({
-        queryKey: ['convoByIdOrParticipants', currUser?.userName, query],
-        queryFn: () =>
-            convoByIdOrParticipants(
-                undefined,
-                [currUser!.userName, query].filter(
-                    (p): p is string => typeof p === "string"
-                )
-            ),
-        enabled: !!currUser,
+    const participants = [currUser?.userName, query]
+        .filter((p): p is string => !!p && p.trim() !== "");
+
+    const { data = [], isLoading, isError } = useQuery({
+        queryKey: ['convoByIdOrParticipants', participants],
+        queryFn: () => convoByIdOrParticipants(undefined, participants),
+        enabled: participants.length > 0,
     });
 
     const switchSearch = () => {

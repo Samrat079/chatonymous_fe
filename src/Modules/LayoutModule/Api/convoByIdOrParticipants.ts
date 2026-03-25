@@ -9,6 +9,7 @@ const convoByIdOrParticipants = async (
 
     if (id) params.append('id', id);
     participants?.forEach( (i) => {
+        // console.log(i);
         params.append('participants', i);
     })
 
