@@ -25,6 +25,7 @@ const UseAuth = () => {
     const logout = () => {
         localStorage.removeItem('token');
         queryClient.removeQueries({queryKey: ["Current_user"]});
+        queryClient.removeQueries({queryKey: ["getCurrentUser"]});
         navigate('/login', {replace: true});
     }
 

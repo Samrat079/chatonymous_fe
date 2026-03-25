@@ -13,14 +13,14 @@ const LoginForm = () => {
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const {currUser, login} = useAuth();
+    const { login} = useAuth();
 
     const {mutate, isPending, isError, error} = useMutation({
         mutationFn: login,
         onSuccess: async (data) => {
             localStorage.setItem("token", data.token);
             await queryClient.invalidateQueries({queryKey: ["getCurrentUser"]});
-            navigate("/profile/" + currUser?.userName , {replace: true})
+            navigate("/profile/" , {replace: true})
         }
     });
 
